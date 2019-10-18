@@ -12,6 +12,7 @@ public class ParkingLot {
     @Column(unique = true)
     private String name;
     private Integer capacity;
+    private String location;
 
     public Long getId() {
         return id;
@@ -44,6 +45,4 @@ public class ParkingLot {
     public void setLocation(String location) {
         this.location = location;
     }
-
-    private String location;
 }

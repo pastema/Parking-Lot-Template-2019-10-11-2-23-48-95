@@ -26,8 +26,8 @@ public class ParkingLotController {
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    private ParkingLot getParkingLotById(@RequestParam(required = false, defaultValue = "") Long Id) {
-        return parkingLotRepository.findByIdContaining(Id);
+    private ParkingLot getParkingLotByName(@RequestParam(required = false, defaultValue = "") String name) {
+        return parkingLotRepository.findByNameContaining(name);
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE)
@@ -37,18 +37,19 @@ public class ParkingLotController {
 
     @PatchMapping(produces = APPLICATION_JSON_VALUE)
     public ParkingLot updateParkingLot(@RequestBody ParkingLot parkingLot,
-                                       @RequestParam(required = false, defaultValue = "") long Id) {
-        ParkingLot findParkingLot = getParkingLotById(Id);
+                                       @RequestParam(required = false, defaultValue = "") String name) {
+        ParkingLot findParkingLot = getParkingLotByName(name);
         if(!isNull(findParkingLot)){
             findParkingLot.setName(parkingLot.getName());
+            findParkingLot.setCapacity(parkingLot.getCapacity());
             parkingLotRepository.save(findParkingLot);
         }
         return findParkingLot;
     }
 
-    @DeleteMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
-    public void deleteParkingLot(@PathVariable Long Id) {
-        ParkingLot findParkingLot = getParkingLotById(Id);
+    @DeleteMapping(value = "/{name}", produces = APPLICATION_JSON_VALUE)
+    public void deleteParkingLot(@PathVariable String name) {
+        ParkingLot findParkingLot = getParkingLotByName(name);
         parkingLotRepository.delete(findParkingLot);
     }
 }
