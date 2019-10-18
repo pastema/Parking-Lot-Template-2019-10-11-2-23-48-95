@@ -14,6 +14,15 @@ public class ParkingLot {
     private Integer capacity;
     private String location;
 
+    public ParkingLot(String name, Integer capacity, String location) {
+        this.name = name;
+        this.capacity = capacity;
+        this.location = location;
+    }
+
+    public ParkingLot() {
+    }
+
     public Long getId() {
         return id;
     }
