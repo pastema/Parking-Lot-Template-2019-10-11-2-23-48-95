@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,8 +23,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +36,7 @@ public class ParkingLotControllerTest {
     @MockBean
     private ParkingLotService parkingLotService;
 
+
     @Autowired
     private MockMvc mvc;
 
@@ -43,8 +44,8 @@ public class ParkingLotControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void should_delete() throws Exception {
-        ParkingLot parkingLot = new ParkingLot("ParkingLot1",1,"WMALL");
+    void should_delete_parkingLot() throws Exception {
+        ParkingLot parkingLot = new ParkingLot("ParkingLot1", 1, "WMALL");
         when(parkingLotService.delete(any())).thenReturn(parkingLot);
 
         ResultActions result = mvc.perform(delete("/parkingLot/ParkingLot1"));
@@ -56,7 +57,7 @@ public class ParkingLotControllerTest {
     @Test
     void should_get_all_parking_lot() throws Exception {
         List<ParkingLot> parkingLot = new ArrayList<>();
-        parkingLot.add(new ParkingLot("ParkingLot1",1,"WMALL"));
+        parkingLot.add(new ParkingLot("ParkingLot1", 1, "WMALL"));
 
         when(parkingLotService.findAll()).thenReturn(parkingLot);
 
@@ -66,5 +67,20 @@ public class ParkingLotControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].name", is("ParkingLot1")));
+    }
+
+
+    @Test
+    void should_add_parking_lot() throws Exception {
+        ParkingLot parkingLot = new ParkingLot("ParkingLot1", 1, "WMALL");
+
+        when(parkingLotService.save(parkingLot)).thenReturn(parkingLot);
+
+        ResultActions result = mvc.perform(post("/parkingLot")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(parkingLot)));
+
+        result.andExpect(status().isCreated())
+                .andDo(print());
     }
 }

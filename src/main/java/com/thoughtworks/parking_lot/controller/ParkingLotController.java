@@ -30,7 +30,7 @@ public class ParkingLotController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ParkingLot getParkingLotByName(@RequestParam(required = false, defaultValue = "") String name) {
-        return parkingLotService.findByNameContaining(name);
+        return parkingLotService.findByName(name);
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE)
@@ -44,7 +44,8 @@ public class ParkingLotController {
 
     @PatchMapping(produces = APPLICATION_JSON_VALUE)
     public HttpEntity updateParkingLot(@RequestBody ParkingLot parkingLot,
-                                       @RequestParam(required = false, defaultValue = "") String name) throws NotFoundException {
+                                       @RequestParam(required = false, defaultValue = "") String name)
+            throws NotFoundException {
         ParkingLot isUpdated = parkingLotService.update(name, parkingLot);
         if (!isNull(isUpdated)) {
             return new ResponseEntity<>(isUpdated, HttpStatus.OK);
@@ -56,4 +57,5 @@ public class ParkingLotController {
     public ParkingLot deleteParkingLot(@PathVariable String name) {
         return parkingLotService.delete(name);
     }
+
 }

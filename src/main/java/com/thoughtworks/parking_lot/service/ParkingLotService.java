@@ -22,8 +22,8 @@ public class ParkingLotService {
         return parkingLotRepository.findAll();
     }
 
-    public ParkingLot findByNameContaining(String name) {
-        return parkingLotRepository.findByNameContaining(name);
+    public ParkingLot findByName(String name) {
+        return parkingLotRepository.findByName(name);
     }
 
     public ParkingLot save(ParkingLot parkingLot) {
@@ -31,7 +31,7 @@ public class ParkingLotService {
     }
 
     public ParkingLot update(String name, ParkingLot parkingLot) {
-        ParkingLot isFound = parkingLotRepository.findByNameContaining(name);
+        ParkingLot isFound = parkingLotRepository.findByName(name);
         if(isNull(isFound)){
             isFound.setName(parkingLot.getName());
             isFound.setCapacity(parkingLot.getCapacity());
@@ -41,7 +41,7 @@ public class ParkingLotService {
     }
 
     public ParkingLot delete(String name) {
-        ParkingLot findPadrkingLot = findByNameContaining(name);
+        ParkingLot findPadrkingLot = findByName(name);
         if(!isNull(findPadrkingLot)) {
             parkingLotRepository.delete(findPadrkingLot);
         }
